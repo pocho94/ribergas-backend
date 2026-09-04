@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ribergas-password-admin
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /salud
+    autoDeploy: true
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://sistema-glp.web.app,https://sistema-glp.firebaseapp.com
+      - key: FIREBASE_SERVICE_ACCOUNT_BASE64
+        sync: false
