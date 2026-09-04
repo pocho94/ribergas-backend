@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/node_modules/
+**/node_modules/
+serviceAccount*.json
+*service-account*.json
+firebase-adminsdk-*.json

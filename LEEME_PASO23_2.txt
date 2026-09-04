@@ -1,0 +1,130 @@
+RIBERGAS - PASO 23.2 - DESPLEGAR BACKEND EN RENDER
+===================================================
+
+OBJETIVO
+--------
+Publicar SOLO la API administrativa de recuperación de contraseñas.
+Firebase Authentication y Firestore continúan en Firebase.
+
+ESTRUCTURA PARA GITHUB
+----------------------
+RiberGas-Backend/
+├── render.yaml
+├── .gitignore
+└── backend/
+    ├── package.json
+    ├── .env.example
+    ├── scripts/
+    └── src/
+
+IMPORTANTE
+----------
+NO subir:
+- backend/.env
+- el JSON de Service Account
+- FIREBASE_SERVICE_ACCOUNT_BASE64 en ningún archivo Git
+
+La variable sensible se pega únicamente en Render.
+
+OPCIÓN RECOMENDADA: DESDE EL PANEL DE RENDER
+--------------------------------------------
+1. Crear un repositorio en GitHub, por ejemplo:
+   ribergas-backend
+
+2. Copiar al repositorio el contenido de esta carpeta.
+
+3. Subir:
+   git init
+   git add .
+   git commit -m "Backend seguro RiberGas"
+   git branch -M main
+   git remote add origin URL_DE_TU_REPOSITORIO
+   git push -u origin main
+
+4. Entrar a Render:
+   New -> Web Service
+   Conectar GitHub
+   Elegir ribergas-backend
+
+5. Configurar:
+   Name:
+   ribergas-password-admin
+
+   Language:
+   Node
+
+   Branch:
+   main
+
+   Root Directory:
+   backend
+
+   Build Command:
+   npm install
+
+   Start Command:
+   npm start
+
+   Health Check Path:
+   /salud
+
+   Instance Type:
+   Free
+
+6. Environment Variables:
+
+   ALLOWED_ORIGINS
+   https://sistema-glp.web.app,https://sistema-glp.firebaseapp.com
+
+   FIREBASE_SERVICE_ACCOUNT_BASE64
+   PEGAR LA MISMA CADENA BASE64 QUE YA FUNCIONÓ EN LOCAL
+
+   No es necesario crear PORT manualmente.
+   Render proporciona PORT al servicio.
+
+7. Crear el Web Service.
+
+8. Esperar hasta ver:
+   Live
+
+9. Render entregará una URL parecida a:
+   https://ribergas-password-admin.onrender.com
+
+10. Probar:
+    https://TU-URL.onrender.com/salud
+
+    Debe responder:
+    {
+      "ok": true,
+      "servicio": "RiberGas Password Admin API"
+    }
+
+RENDER.YAML
+-----------
+Se incluye render.yaml como alternativa para Blueprint.
+La variable FIREBASE_SERVICE_ACCOUNT_BASE64 está marcada sync:false,
+por lo que Render debe pedirla y nunca queda guardada en Git.
+
+SIGUIENTE PASO
+--------------
+Con la URL real de Render:
+
+1. Crear en la raíz del frontend:
+   .env.production
+
+2. Contenido:
+   VITE_RIBERGAS_ADMIN_API_URL=https://URL-REAL.onrender.com
+
+3. npm run build
+
+4. Firebase Hosting:
+   firebase login
+   firebase use sistema-glp
+   firebase deploy --only hosting,firestore:rules
+
+NOTA FREE
+---------
+Render Free puede suspender un Web Service después de 15 minutos
+sin tráfico. La primera petición posterior puede tardar mientras
+el servicio vuelve a iniciar. Para esta función administrativa
+ocasional puede servir para comenzar.
